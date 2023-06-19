@@ -4,7 +4,7 @@ from main.serializers import CheckTXIDSerializer
 from main.classes.tronscan import TronScan
 from main.classes.etherscan import EtherScan
 from main.classes.bscscan import BscScan
-from main.classes.blockstream import BlockStream
+from main.classes.blockonomics import BlockConomics
 from drf_yasg.utils import swagger_auto_schema
 from main.schemas import check_tron_schema, check_ether_schema, check_bsc_schema
 
@@ -65,7 +65,7 @@ class CheckBtcViewSet(APIView):
         serializer = CheckTXIDSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        btc_data = BlockStream(serializer.data.get('txid'))
+        btc_data = BlockConomics(**serializer.data)
         btc_data.execute()
         
         return Response(btc_data.result)

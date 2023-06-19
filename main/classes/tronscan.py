@@ -21,8 +21,6 @@ class TronScan:
         self.amount = amount
         self.config = HANDLER_CONFIG.get('tronscan', {}) 
         self.base_url = self.config.get('api_url', '')
-        # self.params = {'hash': self.txid}
-        # self.header = {'TRON-PRO-API-KEY': self.config.get('api_key', '')}
         self.pre_request()
 
     def pre_request(self):
