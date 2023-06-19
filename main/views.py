@@ -18,8 +18,7 @@ class CheckTronViewSet(APIView):
     def post(self, request):
         serializer = CheckTXIDSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        trons_data = TronScan(serializer.data.get('txid'))
+        trons_data = TronScan(**serializer.data)
         trons_data.execute()
         
         return Response(trons_data.result)

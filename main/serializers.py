@@ -5,6 +5,6 @@ from main.settings import CRYPTO_CURRENCIES, TOKENS
 
 class CheckTXIDSerializer(serializers.Serializer):
     txid = serializers.CharField(required=True)
-    # fromAddress = serializers.CharField(required=True)
-    # toAddress = serializers.CharField(required=True)
-    # amount = serializers.DecimalField(required=True)
+    from_address = serializers.CharField(required=True)
+    to_address = serializers.CharField(required=True)
+    amount = serializers.DecimalField(required=True, max_digits=12, decimal_places=6)

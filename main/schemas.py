@@ -4,14 +4,23 @@ check_tron_schema = {
         description="valid success transactions",
         examples={
             "application/json": {
-                "status": "boolean",
-                "confirmed": "boolean",
-                "confirmations": "integer",
-                "trx_info": 
-                    {
-                        "from": "string",
-                        "to": "string",
-                    }
+                "trx_valid": "boolean",
+                "trx_status": "string",
+                "api_data": {
+                    "icon_url": "string",
+                    "symbol": "string",
+                    "level": "string",
+                    "to_address": "string",
+                    "contract_address": "string",
+                    "type": "string",
+                    "decimals": "integer",
+                    "name": "string",
+                    "vip": "boolean",
+                    "tokenType": "string",
+                    "from_address": "string",
+                    "amount_str": "decimal",
+                    "status": "integer"
+                }
             }
         }
     )
