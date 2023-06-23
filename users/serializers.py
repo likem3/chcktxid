@@ -4,6 +4,8 @@ import random
 import string
 import uuid
 from users.settings import BLOCKCHAIN_OPTIONS, NETWORK_OPTIONS
+from payments.cryptoapi.address import CreateAddressHandler
+from rest_framework.exceptions import ParseError
 
 class AccountSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField()
@@ -53,5 +55,14 @@ class WalletSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         account = validated_data.pop('account')
         validated_data['user_id'] = account.user_id
-        breakpoint()
-        return Wallet.objects.create(account=account, **validated_data)
+
+        try:
+            handler = CreateAddressHandler()
+            handler.create_address(blockchain=validated_data['blockchain'], network=validated_data['network'], label=account.user_id)
+            if handler._address and handler._label:
+                return Wallet.objects.create(account=account, wallet_id=handler._address, label=handler._label, **validated_data)
+            else:
+                raise ParseError('create address failed')
+        except Exception as e:
+            raise ParseError(f'error {e}')
+

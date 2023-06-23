@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'drf_yasg',
-    'main',
+    'drf_api_logger',
+
     'users',
     'payments',
 ]
@@ -55,6 +56,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'drf_api_logger.middleware.api_logger_middleware.APILoggerMiddleware',
 ]
 
 ROOT_URLCONF = 'txidck.urls'
@@ -148,3 +151,8 @@ REST_FRAMEWORK = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+DRF_API_LOGGER_DATABASE = True
+DRF_LOGGER_QUEUE_MAX_SIZE = 100
+DRF_LOGGER_INTERVAL = 5
+DRF_API_LOGGER_EXCLUDE_KEYS = ['password', 'token', 'access', 'refresh']
