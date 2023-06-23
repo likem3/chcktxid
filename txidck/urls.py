@@ -16,9 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from rest_framework import permissions
-from django.urls import re_path, include, path
+from django.urls import include, path, re_path
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from django.views.static import serve
+from txidck import settings
+from rest_framework_simplejwt import views as jwt_views
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -34,9 +37,15 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    # path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    # path('payments/', include('payments.urls')),
+    path('', include('users.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    # path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('admin/', admin.site.urls),
-    path('', include('main.urls'))
+    re_path(r'^static/(?P<path>.*)$', serve),
+    re_path(
+        r'^media/(?P<path>.*)$', serve,
+        {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}
+    ),
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
 ]
