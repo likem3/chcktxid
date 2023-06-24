@@ -21,7 +21,7 @@ class Account(BaseModel):
         db_table = 'users_accounts'
 
 
-class Wallet(models.Model):
+class Wallet(BaseModel):
     STATUS_CHOICES = (
         ('active', 'Active'),
         ('nonactive', 'Non-Active'),
