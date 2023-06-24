@@ -1,39 +1,24 @@
-from payments.models import User
 from rest_framework import serializers
-import random
-import string
-import uuid
+from payments.models import Wallet
+from payments.settings import BLOCKCHAIN_OPTIONS, NETWORK_OPTIONS
+from utils.image_handler import generate_qrcode_with_logo
+from payments.settings import LOGO_SETTINGS
 
-class UserSerializer(serializers.ModelSerializer):
-    user_id = serializers.IntegerField()
-    username = serializers.CharField(required=False)
-    status = serializers.CharField(default='nonactive')
 
-    def generate_random_username(self):
-        # Generate a random username using a combination of letters and digits
-        length = 8
-        letters_digits = string.ascii_letters + string.digits
-        return ''.join(random.choice(letters_digits) for _ in range(length))
-
-    def create(self, validated_data):
-        if 'username' not in validated_data:
-            validated_data['username'] = self.generate_random_username()
-        return User.objects.create(uuid=uuid.uuid4(), **validated_data)
-    
-    def update(self, instance, validated_data):
-        # Disable updating the user_id field
-        validated_data.pop('user_id', None)
-        return super().update(instance, validated_data)
-    
-    def validate_user_id(self, value):
-        if value <= 0:
-            raise serializers.ValidationError("User ID must be a positive integer.")
-        # Validate uniqueness of user_id
-        if User.objects.filter(user_id=value).exists():
-            raise serializers.ValidationError("user_id already saved")
-        return value
+class PaymentWalletSerializer(serializers.ModelSerializer):
+    blockchain = serializers.ChoiceField(choices=BLOCKCHAIN_OPTIONS)
+    network = serializers.ChoiceField(choices=NETWORK_OPTIONS)
 
     class Meta:
-        model = User
-        fields = ('id', 'uuid', 'user_id', 'username', 'status', 'created_at', 'updated_at')
-        read_only_fields = ('uuid', 'id', 'created_at', 'updated_at')
+        model = Wallet
+        fields = ('id', 'blockchain', 'network', 'wallet_id', 'label', 'status', 'qr_b64', 'icon_url')
+        read_only_fields = ('id', 'qr_b64', 'icon_url')
+
+    def create(self, validated_data):
+        icon_url = LOGO_SETTINGS[validated_data['blockchain']]
+        qr_b64 = generate_qrcode_with_logo(text=validated_data['wallet_id'], logo_path=icon_url)
+        # breakpoint()
+        wallet = Wallet.objects.create(icon_url=icon_url, qr_b64=qr_b64, **validated_data)
+        return wallet
+
+        

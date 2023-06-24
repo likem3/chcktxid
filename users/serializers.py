@@ -3,7 +3,7 @@ from rest_framework import serializers
 import random
 import string
 import uuid
-from users.settings import BLOCKCHAIN_OPTIONS, NETWORK_OPTIONS
+from payments.settings import BLOCKCHAIN_OPTIONS, NETWORK_OPTIONS
 from payments.cryptoapi.address import CreateAddressHandler
 from rest_framework.exceptions import ParseError
 
