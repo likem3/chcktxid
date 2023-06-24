@@ -58,7 +58,8 @@ class WalletSerializer(serializers.ModelSerializer):
 
         try:
             handler = CreateAddressHandler()
-            handler.create_address(blockchain=validated_data['blockchain'], network=validated_data['network'], label=account.user_id)
+            # handler.create_address(blockchain=validated_data['blockchain'], network=validated_data['network'], label=account.user_id)
+            handler.create_fake_adress(blockchain=validated_data['blockchain'], network=validated_data['network'], label=account.user_id)
             if handler._address and handler._label:
                 return Wallet.objects.create(account=account, wallet_id=handler._address, label=handler._label, **validated_data)
             else:
