@@ -9,7 +9,7 @@ class Wallet(BaseModel):
 
     blockchain = models.CharField(max_length=50)
     network = models.CharField(max_length=20)
-    wallet_id = models.CharField(unique=True, max_length=255)
+    address = models.CharField(unique=True, max_length=255)
     label = models.CharField(unique=True, max_length=255)
     qr_b64 = models.TextField(blank=True, null=True)
     icon_url = models.TextField(blank=True, null=True)

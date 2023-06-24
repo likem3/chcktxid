@@ -28,3 +28,6 @@ class Transaction(ExtraBaseModel):
     
     class Meta:
         db_table = 'recharges_transaction'
+
+    # @classmethod
+    # def generate

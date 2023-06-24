@@ -49,7 +49,7 @@ class WalletSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Wallet
-        fields = ('id', 'account_id', 'user_id', 'blockchain', 'network', 'wallet_id', 'label', 'status')
+        fields = ('id', 'account_id', 'user_id', 'blockchain', 'network', 'address', 'label', 'status')
         read_only_fields = ('id', 'user_id', 'wallet_id', 'label', 'created_at', 'updated_at')
 
     def create(self, validated_data):
@@ -61,7 +61,7 @@ class WalletSerializer(serializers.ModelSerializer):
             # handler.create_address(blockchain=validated_data['blockchain'], network=validated_data['network'], label=account.user_id)
             handler.create_fake_adress(blockchain=validated_data['blockchain'], network=validated_data['network'], label=account.user_id)
             if handler._address and handler._label:
-                return Wallet.objects.create(account=account, wallet_id=handler._address, label=handler._label, **validated_data)
+                return Wallet.objects.create(account=account, address=handler._address, label=handler._label, **validated_data)
             else:
                 raise ParseError('create address failed')
         except Exception as e:

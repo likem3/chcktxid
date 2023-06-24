@@ -12,7 +12,7 @@ class BaseModel(models.Model):
 
 class ExtraBaseModel(BaseModel):
     deleted_at = models.DateTimeField(null=True, blank=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='created_by')
+    created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, related_name='created_by')
     approved_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, related_name='approved_by')
     cancelled_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, related_name='cancelled_by')
     deleted_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, related_name='deleted_by')

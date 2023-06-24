@@ -25,7 +25,6 @@ def generate_qrcode_with_logo(text, logo_path='/icons/default.png'):
     # Load the logo from base64
     # logo_full_path = os.path.join(settings.BASE_DIR, logo_path)
     logo_full_path = os.path.join(BASE_DIR, logo_path[1:])
-    breakpoint()
     logo_image = Image.open(logo_full_path)
 
     # Resize the logo to 20% of the QR code size

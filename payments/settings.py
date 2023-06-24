@@ -33,3 +33,25 @@ LOGO_SETTINGS = {
     'binance-smart-chain'   : '/media/icons/binance-smart-chain.png',
     'tron'                  : '/media/icons/tron.png'
 }
+
+BLOCKCHAIN_CODE = {
+    'bitcoin'               : 'BTC',
+    'bitcoin-cash'          : 'BCH',
+    'litecoin'              : 'LTC',
+    'dogecoin'              : 'DOGE',
+    'dash'                  : 'DASH',
+    'ethereum'              : 'ETH',
+    'ethereum-classic'      : 'ETC',
+    'xrp'                   : 'XRP',
+    'zcash'                 : 'ZEC',
+    'binance-smart-chain'   : 'BNB',
+    'tron'                  : 'TRX'
+}
+
+NETWORK_CODE = {
+    'testnet'   : 'TNT',
+    'mainnet'   : 'MNT',
+    'mordor'    : 'MRD',
+    'nile'      : 'NLE',
+    'goerli'    : 'GOE'
+}

@@ -11,12 +11,12 @@ class PaymentWalletSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Wallet
-        fields = ('id', 'blockchain', 'network', 'wallet_id', 'label', 'status', 'qr_b64', 'icon_url')
+        fields = ('id', 'blockchain', 'network', 'address', 'label', 'status', 'qr_b64', 'icon_url')
         read_only_fields = ('id', 'qr_b64', 'icon_url')
 
     def create(self, validated_data):
         icon_url = LOGO_SETTINGS[validated_data['blockchain']]
-        qr_b64 = generate_qrcode_with_logo(text=validated_data['wallet_id'], logo_path=icon_url)
+        qr_b64 = generate_qrcode_with_logo(text=validated_data['address'], logo_path=icon_url)
         # breakpoint()
         wallet = Wallet.objects.create(icon_url=icon_url, qr_b64=qr_b64, **validated_data)
         return wallet

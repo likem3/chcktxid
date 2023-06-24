@@ -1,3 +1,5 @@
-from django.shortcuts import render
+from rest_framework import generics
+from recharges.serializers import CreateTransactionSerializer
 
-# Create your views here.
+class TransactionCreateView(generics.CreateAPIView):
+    serializer_class = CreateTransactionSerializer

@@ -27,22 +27,4 @@ class Migration(migrations.Migration):
                 'db_table': 'users_accounts',
             },
         ),
-        migrations.CreateModel(
-            name='Wallet',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('user_id', models.IntegerField()),
-                ('blockchain', models.CharField(max_length=50)),
-                ('network', models.CharField(max_length=20)),
-                ('wallet_id', models.CharField(max_length=255, unique=True)),
-                ('label', models.CharField(max_length=255, unique=True)),
-                ('status', models.CharField(choices=[('active', 'Active'), ('nonactive', 'Non-Active')], default='nonactive', max_length=20)),
-                ('account', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.account')),
-            ],
-            options={
-                'db_table': 'users_wallets',
-            },
-        ),
     ]
