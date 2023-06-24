@@ -1,6 +1,7 @@
 from django.urls import path
-from recharges.views import TransactionCreateView
+from recharges.views import TransactionCreateView, BillTransactionApi
 
 urlpatterns = [
-    path('transactions/create/', TransactionCreateView.as_view(), name='transaction-create'),
+    path('transactions/', TransactionCreateView.as_view(), name='transaction-create'),
+    path('bill/<str:code>/', BillTransactionApi.as_view(), name='bill-detail'),
 ]
