@@ -66,3 +66,39 @@ class CreateAddressHandler(BaseCryptoAPI):
                     'result': "generate_deposit_address: %s\n" % e
                 }
 
+    def create_fake_adress(self, blockchain, network, label):
+        import time
+        import random
+        import string
+
+        def generate_fake_wallet_address():
+            alphabet = string.ascii_lowercase + string.digits
+            address_length = 42  # Crypto wallet addresses are typically 42 characters long
+            
+            # Generate a random string of alphanumeric characters
+            fake_address = ''.join(random.choices(alphabet, k=address_length))
+            
+            return fake_address
+        
+        api_response = {
+            'api_version': '2023-04-25',
+            'context': f'ctx-{label}',
+            'data': {
+                'item': {
+                    'address': generate_fake_wallet_address(),
+                    'created_timestamp': time.time(),
+                    'label': f'{label}-{blockchain}-{network}'
+                }
+            },
+            'request_id': time.time()
+        }
+
+        if api_response and api_response.get('data') and api_response['data'].get('item'):
+            self._address = api_response['data']['item']['address']
+            self._label = api_response['data']['item']['label']
+
+        self._json = {
+            'status': True,
+            'result': api_response
+        }
+
