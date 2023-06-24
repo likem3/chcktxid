@@ -118,3 +118,9 @@ class BillSerializer(serializers.Serializer):
     to_address = serializers.CharField(source='payment_wallet_address')
     to_address_qr = serializers.CharField(source='payment_wallet.qr_b64')
     # bill_url = serializers.CharField()
+
+    def to_representation(self, instance):
+        current_time = timezone.now()
+        if instance.expired_at < current_time:
+            return {'message': 'Transaction has expired'}
+        return super().to_representation(instance)
