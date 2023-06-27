@@ -124,3 +124,28 @@ class BillSerializer(serializers.Serializer):
         if instance.expired_at < current_time:
             return {'message': 'Transaction has expired'}
         return super().to_representation(instance)
+    
+
+class DepositWalletSerializer(serializers.Serializer):
+    account_id = serializers.PrimaryKeyRelatedField(queryset=Account.objects.filter(status='active'), source='account', many=False)
+    blockchain = serializers.ChoiceField(choices=BLOCKCHAIN_OPTIONS)
+    network = serializers.ChoiceField(choices=NETWORK_OPTIONS)
+
+    def create(self, validated_data):
+        account = validated_data.pop('account')
+        blockchain = validated_data['blockchain']
+        network = validated_data['network']
+        
+        try:
+            account_wallet = AccountWallet.objects.get(account=account, blockchain=blockchain, network=network)
+
+        except AccountWallet.DoesNotExist:
+            account_wallet = AccountWallet.create_user_wallet(
+                account=account,
+                user_id=account.user_id,
+                blockchain=blockchain,
+                network=network
+            )
+
+        return account_wallet
+        

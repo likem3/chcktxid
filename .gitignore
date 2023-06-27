@@ -61,3 +61,6 @@ target/
 
 # main settings
 main/settings.py
+
+# ignore beat schedule 
+celerybeat-schedule.*

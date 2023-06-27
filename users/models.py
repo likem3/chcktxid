@@ -1,6 +1,9 @@
 from django.db import models
 from txidck.models import BaseModel
 from payments.cryptoapi.address import CreateAddressHandler
+from utils.image_handler import generate_qrcode_with_logo
+from payments.settings import LOGO_SETTINGS, BLOCKCHAIN_CODE
+from django.db import transaction
 
 class Account(BaseModel):
     STATUS_CHOICES = (
@@ -42,10 +45,11 @@ class Wallet(BaseModel):
         db_table = 'users_wallets'
 
     @classmethod
+    @transaction.atomic
     def create_user_wallet(cls, account, user_id, blockchain, network):
         handler = CreateAddressHandler()
-        # handler.create_address(blockchain=validated_data['blockchain'], network=validated_data['network'], label=account.user_id)
-        handler.create_fake_adress(blockchain=blockchain, network=network, label=account.user_id)
+        handler.create_address(blockchain=blockchain, network=network, label=account.user_id)
+        # handler.create_fake_adress(blockchain=blockchain, network=network, label=account.user_id)
 
         if handler._address and handler._label:
             wallet = cls.objects.create(
@@ -56,6 +60,17 @@ class Wallet(BaseModel):
                 address=handler._address,
                 label=handler._label,
                 status='active'
+            )
+
+            wallet_logo = LOGO_SETTINGS[wallet.blockchain]
+            wallet_image_b64 = generate_qrcode_with_logo(wallet.address, wallet_logo)
+            wallet_symbol = BLOCKCHAIN_CODE[wallet.blockchain]
+
+            WalletAttribut.objects.create(
+                wallet=wallet,
+                address_qr=wallet_image_b64,
+                symbol=wallet_symbol,
+                logo=wallet_logo
             )
 
             return wallet
@@ -69,3 +84,16 @@ class Wallet(BaseModel):
             blockchain=blockchain,
             network=network
         )
+    
+
+class WalletAttribut(BaseModel):
+    wallet = models.OneToOneField(Wallet, on_delete=models.CASCADE, related_name='attributs')
+    address_qr = models.TextField(null=True, blank=True)
+    symbol = models.CharField(max_length=5, null=True, blank=True)
+    logo = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.wallet_id)
+    
+    class Meta:
+        db_table = 'users_wallet_attributs'
